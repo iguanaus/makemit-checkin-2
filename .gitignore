@@ -1,1 +1,7 @@
 *.pyc
+.env
+updateJS.sh
+update2.sh
+updateJSLegit.sh
+web/data3.js
+`

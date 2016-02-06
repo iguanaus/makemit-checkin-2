@@ -1,11 +1,15 @@
 // HackMIT Check-In System
 // Label is 2 5/16 x 2
+debug=false;
 
 (function() {
   $.support.cors = true;
   var MAX_RESULTS = 100;
 
   function printLabel(name, fullname, group, organization, mentor) {
+    if (debug) {
+      return null
+    }
     try {
       var labelXml = '<?xml version="1.0" encoding="utf-8"?>\
         <DieCutLabel Version="8.0" Units="twips">\
@@ -187,6 +191,7 @@
     }).fail(function(data, status) {
       alert('Error saving check-in information to disk. Is the python server running?');
     });
+    //This can be done a lot better
   };
 
   function isTruthy(str) {
@@ -235,11 +240,16 @@
     });
     return $.grep(personData, function(elem) {
       for (var i = 0; i < queries.length; i++) {
-        var terms = elem.name.toLowerCase().split(/[ ,]+/)
-          .concat(elem.organization.toLowerCase().split(/[ ,]+/));
+        //console.log(elem)
         var contains = false;
-        for (var j = 0; j < terms.length; j++) {
-          if (terms[j].indexOf(queries[i]) != -1) contains = true;
+        if (elem.profile.name!=undefined) {
+          var terms = elem.profile.name.toLowerCase().split(/[ ,]+/)
+            .concat(elem.email.toLowerCase().split(/[ ,]+/));
+          
+          for (var j = 0; j < terms.length; j++) {
+            if (terms[j].indexOf(queries[i]) != -1) contains = true;
+          }
+          
         }
         if (contains == false) return false;
       }
@@ -258,8 +268,8 @@
       res.empty();
       for (var i = 0; i < matches.length && i < MAX_RESULTS; i++) {
         var match = matches[i];
-        var name = escapeHtml(match.name);
-        var organization = escapeHtml(match.organization);
+        var name = escapeHtml(match.profile.name);
+        var organization = escapeHtml(match.teamCode);
         var contents = name + ' - ' + organization;
         var node = $('<li>' + contents + '</li>');
         node.data('match', match);
@@ -280,30 +290,39 @@
         if (selected.length > 0) {
           var match = $(selected[0]).data('match');
           $('#form').removeClass('hidden');
-          var name = match.name;
+          var name = match.profile.name;
           var nameParts = $.grep(name.split(/[ ,]+/), function(part) {
             return part != '';
           });
           $('#form-name').val(nameParts[0] || '');
           $('#form-legal').val(name);
-          var organization = match.organization;
-          var parenLoc = organization.indexOf('(');
+          console.log(match)
+          var teamCode = match.teamCode;
+          //console.log(teamCode)
+          if (teamCode==undefined){
+            teamCode = "None"
+          }
+
+          var parenLoc = teamCode.indexOf('(');
           if (parenLoc != -1) {
-            organization = organization.slice(0, parenLoc - 1);
+            teamCode = teamCode.slice(0, parenLoc - 1);
           }
-          $('#form-group').val(match.group)
-          $('#form-organization').val(organization);
-          if (match.learnathon) {
-            $('#swag').text('Day 1 Swag Recipient');
-          } else {
-            $('#swag').text('Day 2 Swag Recipient');
-          }
-          $('#shirt-size').text('Shirt Size: ' + match.size);
+          //$('#form-group').val(match.group)
+          $('#form-organization').val(teamCode);
+          //if (match.learnathon) {
+          $('#swag').text('Day 1 Swag Recipient');
+          //} else {
+          //  $('#swag').text('Day 2 Swag Recipient');
+          //}
+          $('#shirt-size').text('Shirt Size: ' + match.confirmation.shirtSize);
           if (!match.laptop && !match.mentor) {
             $('#laptop').text('Laptop Recipient');
           }
-          if (!match.forms && !match.mentor) {
-            $('#forms').text('Warning: no forms!');
+          if (!match.status.admitted) {
+            $('#forms').text('Warning: no admission!');
+          }
+          if (!match.status.confirmed) {
+            $('#forms').text('Warning: no confirmation!');
           }
           $('#form-mentor').val(match.mentor ? 'Yes' : 'No');
           $('#form-name').focus();

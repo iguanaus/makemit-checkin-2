@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Blueprint Check-In</title>
-  <script src="lib/DYMO.Label.Framework.latest.js"></script>
+  <title>MakeMIT Check-In</title>
+  <script src="http://www.labelwriter.com/software/dls/sdk/js/DYMO.Label.Framework.2.0.2.js"
+        type="text/javascript" charset="UTF-8"> </script>
+
+<!--  <script src="lib/DYMO.Label.Framework.latest.js"></script>-->
   <script src="lib/jquery-2.1.1.min.js"></script>
   <script src="data.js"></script>
   <script src="script.js"></script>
@@ -10,13 +13,12 @@
 </head>
 <body>
   <div class="container">
-    <h1>Blueprint Check-In</h1>
+    <h1>MakeMIT Check-In</h1>
     <form id="form" class="hidden">
       Name: <input type="text" id="form-name" /><br />
       Legal Name: <input type="text" id="form-legal" /><br />
-      Group: <input type="text" id="form-group" /><br />
-      Organization: <input type="text" id="form-organization" /><br />
-      Mentor: <input type="text" id="form-mentor" /><br />
+      Team: <input type="text" id="form-organization" /><br />
+      Role: <input type="text" id="form-mentor" /><br />
       <p class="warning" id="forms"></p>
       <p class="info" id="swag"></p>
       <p class="info" id="shirt-size"></p>

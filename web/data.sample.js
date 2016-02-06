@@ -20,3 +20,4 @@ var personData = [
     "learnathon": true,
     "hackathon": true
   },
+]

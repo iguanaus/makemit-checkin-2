@@ -2,6 +2,15 @@
 
 ## Installation
 
+Make sure to have the DB setup to the correct database and all.
+
+========MakeMIT Login======
+   What to do if they do not have a form
+
+
+
+
+   
 * Download the driver software for [Windows][dymo-win] or [Mac][dymo-mac]
 
 * Install the `montserrat.ttf` font on your computer
@@ -10,6 +19,8 @@
 
 * Run the `server/server.py` server software
     * You can invoke this by running `./server/server.py`
+
+
 
 * Open index.html in your web browser (Google Chrome recommended)
 
